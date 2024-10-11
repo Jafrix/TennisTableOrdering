@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import "./App.css";
-import { createRoot } from "react-dom/client";
+// import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -13,18 +13,26 @@ import RegPage from "../pages/RegPage";
 import LoginPage from "../pages/LoginPage";
 import TablePage from "../pages/TablePage";
 import NotFound from "../pages/NotFound";
-import axiosInstance, { SetAccessToken } from "../axiosInstance";
+import axiosInstance, { setAccessToken } from "../shared/api/axiosInstance";
+import { UserRegType } from "../pages/UserRegType";
 
 function App(): JSX.Element {
 
-  const [user, setUser] = useState(null);
+ 
+
+  type Refresh = {
+    user: UserRegType;
+    accessToken: string;
+  }
+
+  const [user, setUser] = useState<UserRegType | null>(null);
 
   // ===============================================================
 
   useEffect(() => {
-    axiosInstance.get("/tokens/refresh").then(({ data }) => {
+    axiosInstance.get<Refresh>("/tokens/refresh").then(({ data }) => {
       setUser(data.user);
-      SetAccessToken(data.accessToken);
+      setAccessToken(data.accessToken);
     });
   },  []);
 
@@ -38,10 +46,10 @@ function App(): JSX.Element {
       children: [
        
         
-        {
-          path: "/",
-          element: <HomePage />,
-        },
+        // {
+        //   path: "/",
+        //   element: <HomePage />,
+        // },
         {
           path: "/table",
           element: <TablePage user={user}/>,

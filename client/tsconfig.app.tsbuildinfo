@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts"],"version":"5.6.3"}
+{"root":["./src/main.tsx","./src/vite-env.d.ts","./src/app/app.tsx","./src/app/layout.tsx","./src/entities/tables/api/tableservice.ts","./src/entities/tables/types/tabletype.ts","./src/entities/tables/ui/tablecard.tsx","./src/entities/tables/ui/tablelist.tsx","./src/pages/loginpage.tsx","./src/pages/notfound.tsx","./src/pages/regpage.tsx","./src/pages/tablepage.tsx","./src/pages/userregtype.ts","./src/shared/api/axiosinstance.ts"],"errors":true,"version":"5.6.3"}

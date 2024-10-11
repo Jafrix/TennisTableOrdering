@@ -1,27 +1,34 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import axiosInstance, { SetAccessToken } from "../axiosInstance";
+import axiosInstance, { setAccessToken } from "../shared/api/axiosInstance";
+import { UserRegType } from "./UserRegType";
 
-function LoginPage({ setUser }) {
+type LoginPageProps = {
+  setUser: Dispatch<SetStateAction<UserRegType | null>>;
+}
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+function LoginPage({ setUser }:LoginPageProps) {
+
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const navigation = useNavigate();
 
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if(!email.trim() || !password.trim()) {
       return alert("Не верная запись логина или пароля !")
     }
     const response = await axiosInstance.post("/auth/log", { email, password });
+    
       if (response.status === 201) {
       setUser(response.data.user);
-      SetAccessToken(response.data.accessToken)
+      setAccessToken(response.data.accessToken)
       navigation("/");
+  // console.log(response.data.user, "RDRDRD")
+
     }
   };
-
   return (
     <div >
       <form id="log" onSubmit={onSubmitHandler} >

@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import axiosInstance, { SetAccessToken } from "../axiosInstance";
+import axiosInstance, { setAccessToken } from "../shared/api/axiosInstance";
 import { useNavigate } from "react-router-dom";
+// import { AxiosInstance } from "axios";
+import {UserRegType} from "./UserRegType";
 
-function RegPage({ setUser }) {
+type props = {
+  setUser: null | UserRegType;
+}
+
+function RegPage({ setUser }: props) {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -10,6 +16,7 @@ function RegPage({ setUser }) {
   const [rpassword, setRpassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
+
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
@@ -30,15 +37,17 @@ function RegPage({ setUser }) {
       setShowError(false);
 
       
-      const response = await axiosInstance.post("/auth/reg", {
+      const response = await axiosInstance.post<{user: UserRegType}>("/auth/reg", {
         name,
         email,
         password,
       });
 
+      console.log(response.data.user, "JJJJ")
+
       if (response.status === 201) {
         setUser(response.data.user);
-        SetAccessToken(response.data.accessToken);
+        setAccessToken(response.data.accessToken);
         navigate("/");
       } else {
         setErrorMessage("NET Cheloveka TAKOGO");

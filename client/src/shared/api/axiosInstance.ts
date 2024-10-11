@@ -22,7 +22,7 @@ type TokensRefreshResponse = {
 axios.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8";
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: "/api/v1",
+  baseURL: "http://localhost:3000/api/",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

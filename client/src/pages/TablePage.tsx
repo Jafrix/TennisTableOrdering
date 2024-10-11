@@ -1,20 +1,38 @@
-import React, { useEffect, useState } from "react";
-import axiosInstance from "../axiosInstance";
-import ChangePost from "../components/Posts/ChangePost";
-import CreateFormPost from "../components/Posts/CreateFormPost";
-import { useNavigate } from "react-router-dom";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import axiosInstance from "../shared/api/axiosInstance";
+import { UserRegType } from "./UserRegType";
+import TableCard from "../entities/Tables/ui/TableCard";
+import TableList from "../entities/Tables/ui/TableList";
+import { CategoryTypeArray } from "./UserRegType";
 
-function TablePage({ user }) {
+type props = {
+  user: null | UserRegType;
+}
+type props2 = {
+  setTable: Dispatch<SetStateAction<[] | TableType[]>>;
+}
+type TableType = {
+  id: number;
+  day: string;
+  time: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+}
 
-  const [posts, setPosts] = useState([]);
+// import { useNavigate } from "react-router-dom";
+
+function TablePage({ user }:props):JSX.Element {
+
+  const [table, setTable] = useState<props2 | []>([]);
   // const nav = useNavigate();
 
-  const loadPosts = async () => {
+  const loadTable = async () => {
     try {
-      const response = await axiosInstance.get("/post");
+      const response = await axiosInstance.get<{ categories: CategoryTypeArray }>("/table");
       if (response.status === 200) {
-        
-        setPosts(response.data.posts);
+        console.log(response.data, "DATA CLIENT")
+        setTable(response.data.tables);
       }
     } catch (error) {
       console.log(error.message);
@@ -24,18 +42,18 @@ function TablePage({ user }) {
   // nav("/");
 
   useEffect(() => {
-    loadPosts();
+    loadTable();
   }, []);
 
   return (
     <div className="add-form">
       <>
-      {user && <CreateFormPost setPosts={setPosts} user={user}/>}
+      {user && <TableCard setTable={setTable} user={user}/>}
       </>
       <div id="item-wrapper">
         <>
-        {posts.map((post) => (
-          <ChangePost  key={post.id} post={post} setPosts={setPosts} user={user} />
+        {table.map((table) => (
+          <TableList  key={table.id} table={table} setTable={setTable} user={user} />
         ))}
         </>
       </div>
